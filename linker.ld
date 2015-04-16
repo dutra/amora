@@ -1,10 +1,13 @@
+ENTRY(_start)
+
 /* rammap */
 MEMORY
 {
-    ram : ORIGIN = 0x82000000, LENGTH = 0x10000
+    RAM (wx) : ORIGIN = 0x82000000, LENGTH = 0x10000
 }
 
 SECTIONS
 {
-    .text : { *(.text*) } > ram
+    .text : { *(.text*) } > RAM
+    .data : { *(.data*) } > RAM
 }
