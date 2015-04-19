@@ -15,6 +15,10 @@ _start:
 	bl _puts
 	bl _enable_cache
 
+	/* jumps to kernel in C */
+	bl main
+
+/* we should never reach this loop */
 _loop:
 	b _loop
 
