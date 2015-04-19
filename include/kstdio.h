@@ -1,0 +1,3 @@
+
+
+void kprintc(char c);

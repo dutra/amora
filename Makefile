@@ -10,23 +10,23 @@ SRCDIR = src
 OBJDIR = obj
 
 C_SOURCES = $(wildcard $(SRCDIR)/*.c)
-OBJS = $(C_SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o) $(OBJDIR)/boot.o
+OBJS = $(C_SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 .PHONY: clean
 
-all: kernel.bin
+all: $(OBJDIR)/kernel.bin
 
 $(OBJDIR)/boot.o: boot.S
 	$(ARMGNU)-gcc $(CFLAGS) -E $< > $(OBJDIR)/boot.s
 	$(ARMGNU)-as $(ASFLAGS) -c $(OBJDIR)/boot.s -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(ARMGNU)-gcc $(CFLAGS) -c $< -o $@
 	@echo "Compiled "$<" successfully!"
 
-kernel.bin: $(OBJS)
+$(OBJDIR)/kernel.bin: $(OBJS) $(OBJDIR)/boot.o
 
-	$(ARMGNU)-ld -dn $(LDFLAGS) $(OBJDIR)/boot.o $(OBJDIR)/kernel.o -o $(OBJDIR)/kernel.elf
+	$(ARMGNU)-ld -dn $(LDFLAGS) $(OBJDIR)/boot.o $(OBJS) -o $(OBJDIR)/kernel.elf
 	$(ARMGNU)-objdump -D $(OBJDIR)/kernel.elf > $(OBJDIR)/kernel.list
 	$(ARMGNU)-objcopy $(OBJDIR)/kernel.elf -O srec $(OBJDIR)/kernel.srec
 	$(ARMGNU)-objcopy $(OCFLAGS) -O binary $(OBJDIR)/kernel.elf $(OBJDIR)/kernel.bin
