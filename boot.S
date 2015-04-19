@@ -13,8 +13,8 @@ str_hello:
 _start:
 	ldr r1, =str_hello
 	bl _puts
-	ldr r1, =0xABCD0123
-	bl _puthex
+	bl _enable_cache
+
 _loop:
 	b _loop
 
@@ -22,11 +22,13 @@ _loop:
 * ENABLE L2 INSTRUCTION CACHE
 */
 _enable_cache:
-	push {r0, lr}
+	push {r0, r1, r2, lr}
 	mrc	p15, 0, r0, c1, c0, 0
-	and r0, r0, #0x00001000
-	cmp r0, #0x00001000
-	pop {r0, pc}
+	orr r0, r0, #C1CTL_I
+	orr r0, r0, #C1CTL_Z
+	orr r0, r0, #C1CTL_C
+	mcr	p15, 0, r0, c1, c0, 0
+	pop {r0, r1, r2, pc}
 
 /*------------------------------------------------------------------------------
 * PUTS
