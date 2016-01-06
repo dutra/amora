@@ -1,11 +1,33 @@
 
 #include <sysinit.h>
 #include <armv7a_watchdog.h>
+#include <armv7a.h>
+#include <kstdio.h>
+
+extern void init_ivt(void);
+extern void enable_interrupts(void);
+extern void software_interrupt(void);
 
 void sysinit() {
-    
+
+
     // stop watchdog timer in order to prevent cpu from resetting
+    kprints("Stopping WatchDog\r\n");
+//    kprintc('S');
     watchdog_stop();
+
+    // initialize Interrupt Vector Table
+    kprints("Initializing Interrupt Vector Table\r\n");
+    init_ivt();
+
+    // enable interrupts
+    kprints("Enabling Interrupts\r\n");
+    enable_interrupts();
+
+    kprints("Calling SWI\r\n");
+    software_interrupt();
+    kprintc('Q');
+
 }
 
 void watchdog_stop() {

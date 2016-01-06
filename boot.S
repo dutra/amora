@@ -7,12 +7,13 @@ str_hello:
 
 .text
 	.global _start
+    .global _puts
 	.arm
 	.align
 
 _start:
-	ldr r1, =str_hello
-	bl _puts
+//	ldr r1, =str_hello
+//	bl _puts
 	bl _enable_cache
 
 	/* jumps to kernel in C */

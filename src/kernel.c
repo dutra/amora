@@ -5,11 +5,11 @@
 
 int main() {
 
-    kprintc('B');
+    kprints("Starting Amora...\r\n\r\n");
+
     sysinit();
-    kprintc('C');
 
-
+    kprints("System Initialized...\r\n");
 
     while(1);
 

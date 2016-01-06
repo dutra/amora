@@ -5,5 +5,4 @@
 void sysinit();
 void watchdog_stop();
 
-
 #endif
